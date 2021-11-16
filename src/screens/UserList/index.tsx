@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -36,11 +36,13 @@ const UserList: React.FC<any> = (): JSX.Element => {
     dispatch(fetchUserList());
   };
 
+  const initFetch = useCallback(() => {
+    dispatch(fetchUserList());
+  }, [dispatch]);
+
   useEffect(() => {
-    try {
-      dispatch(fetchUserList());
-    } catch (error) {}
-  }, []);
+    initFetch();
+  }, [initFetch]);
 
   useEffect(() => {
     if (userList.length !== 0 && !error) {

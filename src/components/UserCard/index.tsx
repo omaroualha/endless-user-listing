@@ -26,7 +26,7 @@ function arePropsEqual(prevProps: any, nextProps: any) {
   return nextProps.user.firstName === prevProps.user.firstName;
 }
 
-// Fix FlatList performance WARN `VirtualizedList: 
+// Fix FlatList performance WARN `VirtualizedList:
 // You have a large list that is slow to update`
 // with React memo
 export default memo(UserCard, arePropsEqual);
