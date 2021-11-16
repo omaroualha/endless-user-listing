@@ -19,4 +19,14 @@ const UserCard = ({user}: CardProps) => {
   );
 };
 
-export default UserCard
+// Return true if passing nextProps to render would return
+// the same result as passing prevProps to render,
+// otherwise return false
+function arePropsEqual(prevProps: any, nextProps: any) {
+  return nextProps.user.firstName === prevProps.user.firstName;
+}
+
+// Fix FlatList performance WARN `VirtualizedList: 
+// You have a large list that is slow to update`
+// with React memo
+export default memo(UserCard, arePropsEqual);
