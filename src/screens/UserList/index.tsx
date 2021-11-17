@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   StatusBar,
   View,
+  Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchUserList} from '../../redux/action';
@@ -12,43 +13,39 @@ import {UserModel} from '../../redux/types';
 import UserCard from '../../components/UserCard';
 import {Styles} from './style';
 
-const UserList: React.FC<any> = (): JSX.Element => {
+const UserList = (): JSX.Element => {
   const [userListToRender, setUserListToRender] = useState<UserModel[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const {userList, error} = useSelector((state: any) => state.userReducer);
-
-  const renderRow: React.FC<{item: UserModel}> = ({item}) => {
-    return <UserCard user={item} />;
-  };
-
-  const renderFooter: React.FC = () => {
-    return isLoading ? (
-      <View style={Styles.loader}>
-        <ActivityIndicator size={'large'} />
-      </View>
-    ) : null;
-  };
 
   const handleLoadMore = () => {
     setIsLoading(true);
     dispatch(fetchUserList());
   };
 
-  const initFetch = useCallback(() => {
+  const initialFetch = useCallback(() => {
     dispatch(fetchUserList());
   }, [dispatch]);
 
   useEffect(() => {
-    initFetch();
-  }, [initFetch]);
+    initialFetch();
+  }, [initialFetch]);
 
   useEffect(() => {
-    if (userList.length !== 0 && !error) {
-      setUserListToRender((prevState: any) => [...prevState, ...userList]);
-      setIsLoading(false);
+    if (error) {
+      Alert.alert('Oops, seems like your are not connected to the internet. 😀');
+      return;
     }
+
+    if (!userListToRender && !userList.length) {
+      Alert.alert('Oops, seems like your list is empty. 😀');
+      return;
+    }
+
+    setUserListToRender(prevState => [...prevState, ...userList]);
+    setIsLoading(false);
   }, [userList, error]);
 
   return (
@@ -57,13 +54,19 @@ const UserList: React.FC<any> = (): JSX.Element => {
       <FlatList
         style={Styles.container}
         data={userListToRender}
-        renderItem={renderRow}
+        renderItem={list => <UserCard user={list.item} />}
         removeClippedSubviews
         disableVirtualization
         keyExtractor={(item, index) => index.toString()}
         onEndReached={handleLoadMore}
-        onEndReachedThreshold={0}
-        ListFooterComponent={renderFooter}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() =>
+          isLoading ? (
+            <View style={Styles.loader}>
+              <ActivityIndicator size={'large'} />
+            </View>
+          ) : null
+        }
       />
     </SafeAreaView>
   );

@@ -16,3 +16,18 @@ export interface ErrorAction {
 }
 
 export type FetchUserAction = FetchUserListAction | ErrorAction;
+
+export type ApiResponse = {
+  results: [
+    {
+      name: {
+        title: string;
+        last: string;
+        first: string;
+      };
+      picture: {
+        medium: string;
+      };
+    },
+  ];
+};

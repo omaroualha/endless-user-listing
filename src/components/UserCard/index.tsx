@@ -7,7 +7,7 @@ interface CardProps {
   user: UserModel;
 }
 
-const UserCard = ({user}: CardProps) => {
+const UserCard = ({user}: CardProps): JSX.Element => {
   return (
     <View style={Styles.container}>
       <Image source={{uri: user.picture}} style={Styles.profileImage} />
@@ -22,11 +22,12 @@ const UserCard = ({user}: CardProps) => {
 // Return true if passing nextProps to render would return
 // the same result as passing prevProps to render,
 // otherwise return false
-function arePropsEqual(prevProps: any, nextProps: any) {
+function arePropsEqual(prevProps: CardProps, nextProps: CardProps) {
   return nextProps.user.firstName === prevProps.user.firstName;
 }
 
 // Fix FlatList performance WARN `VirtualizedList:
 // You have a large list that is slow to update`
-// with React memo
+// with React memo, fix found Here:
+// https://stackoverflow.com/questions/63499934/using-react-memo-in-functional-component-to-renderitem-flatlist-to-minimize-re-r#answers
 export default memo(UserCard, arePropsEqual);
