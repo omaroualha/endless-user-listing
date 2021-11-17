@@ -22,9 +22,8 @@ const UserCard = ({user}: CardProps): JSX.Element => {
 // Return true if passing nextProps to render would return
 // the same result as passing prevProps to render,
 // otherwise return false
-function arePropsEqual(prevProps: CardProps, nextProps: CardProps) {
-  return nextProps.user.firstName === prevProps.user.firstName;
-}
+const arePropsEqual = (prevProps: CardProps, nextProps: CardProps) =>
+  nextProps.user.firstName === prevProps.user.firstName;
 
 // Fix FlatList performance WARN `VirtualizedList:
 // You have a large list that is slow to update`
