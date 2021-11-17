@@ -24,7 +24,5 @@ A simple React Native app, that displays an endless user list fetched from API
 ## Android
 
 + Run `android avd` and start an emulator
-+ Run `react-native run-android`
- 
---OR--
 + Run `yarn android`
+
